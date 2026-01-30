@@ -42,50 +42,39 @@ export const useChessGame = () => {
 
   useEffect(() => {
     if (isAITurn && status === 'in-progress') {
-      setIsLoadingAiMove(true);
       const getAiMove = async () => {
-        let aiMove = null;
+        setIsLoadingAiMove(true);
         try {
-          const { move } = await suggestBestMove({ fen: game.fen() });
-          aiMove = move;
-        } catch (error) {
-          console.error('Failed to get AI move from API, will use random move.', error);
-          toast({
-            variant: 'destructive',
-            title: 'AI Error',
-            description: 'Could not fetch AI move. Making a random move.',
+          const { move: aiMove } = await suggestBestMove({
+            fen: game.fen(),
+            engine: 'stockfish',
+            level: 5,
           });
-        }
 
-        const gameCopy = new Chess(game.fen());
-
-        if (aiMove) {
+          const gameCopy = new Chess(game.fen());
           if (gameCopy.move(aiMove)) {
             setGame(gameCopy);
             updateGame(gameCopy);
-            setIsLoadingAiMove(false);
-            return;
           } else {
-            console.error('API move is invalid, will use random move', aiMove);
-             toast({
+            console.error('API move is invalid', aiMove);
+            toast({
               variant: 'destructive',
               title: 'AI Error',
-              description: 'AI returned an invalid move. Making a random move.',
+              description: 'AI returned an invalid move.',
             });
           }
+        } catch (error: any) {
+          console.error('Failed to get AI move from API.', error);
+          toast({
+            variant: 'destructive',
+            title: 'AI Error',
+            description: `Could not fetch AI move: ${error.message}`,
+          });
+        } finally {
+          setIsLoadingAiMove(false);
         }
-        
-        // Fallback to random move
-        const moves = gameCopy.moves();
-        if (moves.length > 0) {
-          const randomMove = moves[Math.floor(Math.random() * moves.length)];
-          gameCopy.move(randomMove);
-          setGame(gameCopy);
-          updateGame(gameCopy);
-        }
-        setIsLoadingAiMove(false);
       };
-      
+
       // Delay AI move slightly for better UX
       setTimeout(getAiMove, 500);
     }

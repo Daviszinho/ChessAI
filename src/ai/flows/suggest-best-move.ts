@@ -34,7 +34,7 @@ const suggestBestMoveFlow = ai.defineFlow(
     outputSchema: SuggestBestMoveOutputSchema,
   },
   async input => {
-    const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const apiUrl = 'http://daviszinhovm.westus2.cloudapp.azure.com/api/move';
 
     try {
       const response = await fetch(apiUrl, {
