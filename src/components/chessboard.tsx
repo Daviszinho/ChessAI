@@ -1,37 +1,39 @@
 'use client';
+import { useMemo } from 'react';
 import type { FC } from 'react';
+import { Chessboard as ReactChessboard } from 'react-chessboard';
 import type { Square } from 'chess.js';
-import { cn } from '@/lib/utils';
-import type { ChessPiece as PieceType, Move } from '@/lib/types';
-import ChessPiece from './chess-piece';
+import type { Move } from '@/lib/types';
 
 interface ChessboardProps {
-  board: (PieceType | null)[][];
-  onSquareClick: (square: Square) => void;
-  selectedPiece: Square | null;
-  legalMoves: Square[];
+  position: string;
+  onPieceDrop: (sourceSquare: Square, targetSquare: Square) => boolean;
   lastMove: Move | null;
   isFlipped: boolean;
   isAITurn: boolean;
+  isLoadingAiMove: boolean;
 }
 
 export const Chessboard: FC<ChessboardProps> = ({
-  board,
-  onSquareClick,
-  selectedPiece,
-  legalMoves,
+  position,
+  onPieceDrop,
   lastMove,
   isFlipped,
   isAITurn,
+  isLoadingAiMove,
 }) => {
-  const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-  const ranks = ['1', '2', '3', '4', '5', '6', '7', '8'];
-
-  const boardRanks = isFlipped ? [...ranks] : [...ranks].reverse();
-
+  const customSquareStyles = useMemo(() => {
+    const styles: { [key: string]: React.CSSProperties } = {};
+    if (lastMove) {
+      styles[lastMove.from] = { backgroundColor: 'hsl(var(--accent) / 0.4)' };
+      styles[lastMove.to] = { backgroundColor: 'hsl(var(--accent) / 0.4)' };
+    }
+    return styles;
+  }, [lastMove]);
+  
   return (
     <div className="relative aspect-square w-full">
-      {isAITurn && (
+      {isLoadingAiMove && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="flex flex-col items-center">
             <svg
@@ -60,52 +62,18 @@ export const Chessboard: FC<ChessboardProps> = ({
           </div>
         </div>
       )}
-      <div className="grid grid-cols-8 aspect-square w-full">
-        {boardRanks.map((rank, rankIndex) => {
-          const boardFiles = isFlipped ? [...files].reverse() : [...files];
-          return boardFiles.map((file, fileIndex) => {
-            const square = `${file}${rank}` as Square;
-            const piece = board[7 - rankIndex][fileIndex];
-            const isLight = (rankIndex + fileIndex) % 2 !== 0;
-
-            const isLegalMove = legalMoves.includes(square);
-            const isSelected = selectedPiece === square;
-            const isLastMove = lastMove?.from === square || lastMove?.to === square;
-
-            return (
-              <div
-                key={square}
-                onClick={() => onSquareClick(square)}
-                className={cn(
-                  'relative flex aspect-square items-center justify-center',
-                  isLight ? 'bg-beige-200' : 'bg-green-700',
-                   isLight ? 'bg-background' : 'bg-primary/80',
-                   'cursor-pointer transition-colors duration-200'
-                )}
-              >
-                {piece && <ChessPiece {...piece} size={-1} />}
-                 <div className="absolute inset-0 flex items-center justify-center text-5xl md:text-6xl lg:text-7xl">
-                  {piece && (
-                    <ChessPiece
-                      type={piece.type}
-                      color={piece.color}
-                      size="90%"
-                    />
-                  )}
-                </div>
-
-                {isLegalMove && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-1/3 w-1/3 rounded-full bg-accent/50"></div>
-                  </div>
-                )}
-                 {isSelected && <div className="absolute inset-0 bg-accent/50" />}
-                 {isLastMove && <div className="absolute inset-0 bg-accent/40" />}
-              </div>
-            );
-          });
-        })}
-      </div>
+      <ReactChessboard
+        position={position}
+        onPieceDrop={onPieceDrop}
+        boardOrientation={isFlipped ? 'black' : 'white'}
+        arePiecesDraggable={!isAITurn}
+        customBoardStyle={{
+          borderRadius: 'var(--radius)',
+        }}
+        customSquareStyles={customSquareStyles}
+        customLightSquareStyle={{ backgroundColor: 'hsl(var(--background))' }}
+        customDarkSquareStyle={{ backgroundColor: 'hsl(var(--primary) / 0.8)' }}
+      />
     </div>
   );
 };

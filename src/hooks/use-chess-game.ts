@@ -1,11 +1,10 @@
 'use client';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Chess, type Square, type Piece } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { useToast } from '@/hooks/use-toast';
 import type {
   HistoryItem,
   GameStatus,
-  ChessPiece,
   Move,
 } from '@/lib/types';
 
@@ -13,17 +12,16 @@ const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export const useChessGame = () => {
   const [game, setGame] = useState(new Chess());
-  const [board, setBoard] = useState<(ChessPiece | null)[][]>(game.board());
+  const [position, setPosition] = useState(game.fen());
   const [status, setStatus] = useState<GameStatus>('in-progress');
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isAITurn, setIsAITurn] = useState(false);
   const [isLoadingAiMove, setIsLoadingAiMove] = useState(false);
-  const [selectedPiece, setSelectedPiece] = useState<Square | null>(null);
 
   const { toast } = useToast();
 
   const updateGame = useCallback((gameInstance: Chess) => {
-    setBoard(gameInstance.board());
+    setPosition(gameInstance.fen());
     const moves = gameInstance.history({ verbose: true });
     setHistory(
       moves.map((move, i) => ({
@@ -64,7 +62,6 @@ export const useChessGame = () => {
     const newGameInstance = new Chess();
     setGame(newGameInstance);
     updateGame(newGameInstance);
-    setSelectedPiece(null);
   }, [updateGame]);
 
   const loadFen = useCallback((fen: string) => {
@@ -72,7 +69,6 @@ export const useChessGame = () => {
       const newGameInstance = new Chess(fen);
       setGame(newGameInstance);
       updateGame(newGameInstance);
-      setSelectedPiece(null);
       return true;
     } catch (e) {
       return false;
@@ -86,41 +82,33 @@ export const useChessGame = () => {
     newGameInstance.undo(); 
     setGame(newGameInstance);
     updateGame(newGameInstance);
-    setSelectedPiece(null);
   }, [game, updateGame]);
 
-  const handleSquareClick = useCallback(
-    (square: Square) => {
-      if (isAITurn) return;
+  const onDrop = (sourceSquare: Square, targetSquare: Square): boolean => {
+    if (isAITurn) return false;
 
-      if (!selectedPiece) {
-        const piece = game.get(square);
-        if (piece && piece.color === game.turn()) {
-          setSelectedPiece(square);
+    const gameCopy = new Chess(game.fen());
+    try {
+        const move = gameCopy.move({
+            from: sourceSquare,
+            to: targetSquare,
+            promotion: 'q', // NOTE: always promote to a queen for example simplicity
+        });
+        
+        // illegal move
+        if (move === null) {
+            return false;
         }
-      } else {
-        try {
-          const move = game.move({ from: selectedPiece, to: square, promotion: 'q' });
-          if(move) {
-            const newGame = new Chess(game.fen());
-            setGame(newGame);
-            updateGame(newGame);
-          }
-        } catch (e) {
-          // invalid move
-        } finally {
-            setSelectedPiece(null);
-        }
-      }
-    },
-    [game, selectedPiece, isAITurn, updateGame]
-  );
 
-  const legalMoves = useMemo(() => {
-    if (!selectedPiece) return [];
-    const moves = game.moves({ square: selectedPiece, verbose: true });
-    return moves.map((move) => move.to);
-  }, [selectedPiece, game]);
+        setGame(gameCopy);
+        updateGame(gameCopy);
+        return true;
+
+    } catch (error) {
+        return false;
+    }
+  };
+
 
   const lastMove: Move | null = useMemo(() => {
     const history = game.history({ verbose: true });
@@ -130,17 +118,15 @@ export const useChessGame = () => {
   }, [game]);
 
   return {
-    board,
+    position,
     status,
     history,
     isAITurn,
     isLoadingAiMove,
-    selectedPiece,
-    legalMoves,
     lastMove,
     newGame,
     undoMove,
     loadFen,
-    handleSquareClick,
+    onDrop,
   };
 };

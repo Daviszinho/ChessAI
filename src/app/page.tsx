@@ -22,13 +22,12 @@ export default function Home() {
         <div className="w-full lg:flex-1">
           <Card className="aspect-square w-full p-2 shadow-lg sm:p-4">
             <Chessboard
-              board={game.board}
-              onSquareClick={game.handleSquareClick}
-              selectedPiece={game.selectedPiece}
-              legalMoves={game.legalMoves}
+              position={game.position}
+              onPieceDrop={game.onDrop}
               lastMove={game.lastMove}
               isFlipped={false}
               isAITurn={game.isAITurn}
+              isLoadingAiMove={game.isLoadingAiMove}
             />
           </Card>
         </div>
