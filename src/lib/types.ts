@@ -1,12 +1,5 @@
 import type { Piece, Square } from 'chess.js';
 
-export type Engine = {
-  id: string;
-  name: string;
-  description: string;
-  max_level: number;
-};
-
 export type HistoryItem = {
   san: string;
   fen: string;

@@ -2,10 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Chess, type Square, type Piece } from 'chess.js';
 import { useToast } from '@/hooks/use-toast';
-import { suggestBestMove } from '@/ai/flows/suggest-best-move';
-import { explainAiMove } from '@/ai/flows/explain-ai-move';
 import type {
-  Engine,
   HistoryItem,
   GameStatus,
   ChessPiece,
@@ -21,13 +18,7 @@ export const useChessGame = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isAITurn, setIsAITurn] = useState(false);
   const [isLoadingAiMove, setIsLoadingAiMove] = useState(false);
-
-  const [engines, setEngines] = useState<Engine[]>([]);
-  const [settings, setSettings] = useState({ engine: 'stockfish', level: 5 });
-
   const [selectedPiece, setSelectedPiece] = useState<Square | null>(null);
-  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
-  const [isExplaining, setIsExplaining] = useState(false);
 
   const { toast } = useToast();
 
@@ -51,56 +42,23 @@ export const useChessGame = () => {
   }, []);
 
   useEffect(() => {
-    const fetchEngines = async () => {
-      try {
-        const response = await fetch(
-          'https://daviszinhovm.westus2.cloudapp.azure.com/api/engines'
-        );
-        const data = await response.json();
-        setEngines(data.engines);
-      } catch (error) {
-        console.error('Failed to fetch engines:', error);
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: 'Could not fetch chess engines from the server.',
-        });
-      }
-    };
-    fetchEngines();
-  }, [toast]);
-
-  useEffect(() => {
     if (isAITurn && status === 'in-progress') {
       setIsLoadingAiMove(true);
-      const getAiMove = async () => {
-        try {
-          const result = await suggestBestMove({
-            fen: game.fen(),
-            engine: settings.engine,
-            level: settings.level,
-          });
-          if (result && result.move) {
-            game.move(result.move);
-            const newGame = new Chess(game.fen());
-            setGame(newGame);
-            updateGame(newGame);
-          }
-        } catch (error) {
-          console.error('Error getting AI move:', error);
-          toast({
-            variant: 'destructive',
-            title: 'AI Error',
-            description: 'Could not get a move from the AI.',
-          });
-        } finally {
-          setIsLoadingAiMove(false);
+      const getAiMove = () => {
+        const moves = game.moves();
+        if (moves.length > 0) {
+          const move = moves[Math.floor(Math.random() * moves.length)];
+          game.move(move);
+          const newGame = new Chess(game.fen());
+          setGame(newGame);
+          updateGame(newGame);
         }
+        setIsLoadingAiMove(false);
       };
       // Delay AI move slightly for better UX
       setTimeout(getAiMove, 500);
     }
-  }, [isAITurn, status, game, settings, toast, updateGame]);
+  }, [isAITurn, status, game, updateGame]);
 
   const newGame = useCallback(() => {
     const newGameInstance = new Chess();
@@ -158,21 +116,6 @@ export const useChessGame = () => {
     [game, selectedPiece, isAITurn, updateGame]
   );
 
-  const getAiExplanation = useCallback(async (move: HistoryItem) => {
-      setIsExplaining(true);
-      try {
-        const result = await explainAiMove({ fen: move.fen, move: move.san, level: settings.level, engine: settings.engine });
-        setAiExplanation(result.explanation);
-      } catch (error) {
-        console.error('Error getting AI explanation:', error);
-        setAiExplanation('Could not get an explanation from the AI.');
-      } finally {
-        setIsExplaining(false);
-      }
-    }, [settings]);
-
-  const closeExplanation = () => setAiExplanation(null);
-
   const legalMoves = useMemo(() => {
     if (!selectedPiece) return [];
     const moves = game.moves({ square: selectedPiece, verbose: true });
@@ -190,12 +133,8 @@ export const useChessGame = () => {
     board,
     status,
     history,
-    engines,
-    settings,
     isAITurn,
     isLoadingAiMove,
-    aiExplanation,
-    isExplaining,
     selectedPiece,
     legalMoves,
     lastMove,
@@ -203,8 +142,5 @@ export const useChessGame = () => {
     undoMove,
     loadFen,
     handleSquareClick,
-    setSettings,
-    getAiExplanation,
-    closeExplanation,
   };
 };
