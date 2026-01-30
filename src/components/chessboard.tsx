@@ -4,6 +4,7 @@ import type { FC } from 'react';
 import { Chessboard as ReactChessboard } from 'react-chessboard';
 import type { Square } from 'chess.js';
 import type { Move } from '@/lib/types';
+import { useTranslation } from '@/i18n/provider';
 
 interface ChessboardProps {
   position: string;
@@ -22,6 +23,7 @@ export const Chessboard: FC<ChessboardProps> = ({
   isAITurn,
   isLoadingAiMove,
 }) => {
+  const { t } = useTranslation();
   const customSquareStyles = useMemo(() => {
     const styles: { [key: string]: React.CSSProperties } = {};
     if (lastMove) {
@@ -57,7 +59,7 @@ export const Chessboard: FC<ChessboardProps> = ({
               ></path>
             </svg>
             <p className="mt-2 text-lg font-semibold text-primary-foreground">
-              AI is thinking...
+              {t('aiThinking')}
             </p>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { I18nProvider } from '@/i18n/provider';
 
 export const metadata: Metadata = {
   title: 'ChessAI',
@@ -32,8 +33,10 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon.svg"></link>
       </head>
       <body className="font-body antialiased">
-        {children}
-        <Toaster />
+        <I18nProvider>
+          {children}
+          <Toaster />
+        </I18nProvider>
       </body>
     </html>
   );
