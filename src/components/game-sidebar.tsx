@@ -17,7 +17,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import type { EngineType } from '@/lib/types';
+import type { EngineType, HistoryItem } from '@/lib/types';
 import { useTranslation, type Locale } from '@/i18n/provider';
 
 
@@ -57,6 +57,11 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
     }
   };
 
+  const movePairs: HistoryItem[][] = [];
+  for (let i = 0; i < game.history.length; i += 2) {
+    movePairs.push(game.history.slice(i, i + 2));
+  }
+
   return (
     <Card className="h-full shadow-lg">
       <CardHeader>
@@ -83,13 +88,15 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
         <div>
             <h3 className="flex items-center mb-2 font-semibold"><History className="mr-2 h-4 w-4" />{t('history')}</h3>
             <ScrollArea className="h-64 rounded-md border p-2">
-              {game.history.length === 0 ? (
+              {movePairs.length === 0 ? (
                 <p className="text-center text-muted-foreground p-4">{t('noMoves')}</p>
               ) : (
-                <ol className="space-y-2">
-                  {game.history.map((move, index) => (
-                    <li key={index} className="flex items-center justify-between text-sm p-2 rounded-md even:bg-muted/50">
-                      <span className="font-mono">{`${Math.floor(index / 2) + 1}. ${move.san}`}</span>
+                <ol className="space-y-1">
+                  {movePairs.map((pair, index) => (
+                    <li key={index} className="grid grid-cols-[auto_1fr_1fr] items-baseline gap-x-4 text-sm p-1 rounded-md even:bg-muted/50">
+                      <span className="font-mono text-right text-muted-foreground">{`${index + 1}.`}</span>
+                      <span className="font-mono">{pair[0]?.san}</span>
+                      <span className="font-mono text-foreground/80">{pair[1]?.san}</span>
                     </li>
                   ))}
                 </ol>
