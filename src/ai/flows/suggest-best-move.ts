@@ -49,36 +49,52 @@ const suggestBestMoveFlow = ai.defineFlow(
   },
   async input => {
     const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const postData = JSON.stringify(input);
+    const url = new URL(apiUrl);
 
-    const agent = new https.Agent({
-      rejectUnauthorized: false,
-    });
+    const options = {
+      hostname: url.hostname,
+      port: url.port || 443,
+      path: url.pathname,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData),
+      },
+      rejectUnauthorized: false, // Bypass SSL certificate validation
+    };
 
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(input),
-        // @ts-ignore
-        agent: agent,
+    return new Promise((resolve, reject) => {
+      const req = https.request(options, res => {
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', () => {
+          try {
+            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
+              const jsonData = JSON.parse(data);
+              if (jsonData.success) {
+                resolve({move: jsonData.response.move});
+              } else {
+                reject(new Error(`API Error: ${jsonData.message || 'Unknown API error'}`));
+              }
+            } else {
+              reject(new Error(`HTTP error! Status: ${res.statusCode}`));
+            }
+          } catch (e: any) {
+            reject(new Error(`Failed to parse API response: ${e.message}`));
+          }
+        });
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      req.on('error', e => {
+        console.error('Error fetching best move:', e);
+        reject(new Error(`Failed to get best move: ${e.message}`));
+      });
 
-      const data = await response.json();
-
-      if (data.success) {
-        return {move: data.response.move};
-      } else {
-        throw new Error(`API Error: ${data.message}`);
-      }
-    } catch (error: any) {
-      console.error('Error fetching best move:', error);
-      throw new Error(`Failed to get best move: ${error.message}`);
-    }
+      req.write(postData);
+      req.end();
+    });
   }
 );
