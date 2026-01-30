@@ -72,7 +72,7 @@ export const Chessboard: FC<ChessboardProps> = ({
         }}
         customSquareStyles={customSquareStyles}
         customLightSquareStyle={{ backgroundColor: 'hsl(var(--background))' }}
-        customDarkSquareStyle={{ backgroundColor: 'hsl(var(--primary) / 0.8)' }}
+        customDarkSquareStyle={{ backgroundColor: '#A0522D' }}
       />
     </div>
   );
