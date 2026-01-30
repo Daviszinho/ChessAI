@@ -5,6 +5,7 @@ import {
   RotateCcw,
   Undo2,
   History,
+  Cog,
 } from 'lucide-react';
 import type { useChessGame } from '@/hooks/use-chess-game';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import type { EngineType } from '@/lib/types';
+
 
 type GameSidebarProps = {
   game: ReturnType<typeof useChessGame>;
@@ -58,14 +63,14 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
           <span className="text-lg font-normal text-foreground/80">{statusMessage()}</span>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex space-x-2 mb-4">
+      <CardContent className="flex flex-col gap-4">
+        <div className="flex space-x-2">
           <Button onClick={game.newGame} className="w-full">
             <RotateCcw className="mr-2 h-4 w-4" /> New Game
           </Button>
           <Button
             onClick={game.undoMove}
-            disabled={game.history.length === 0}
+            disabled={game.history.length < 2}
             variant="outline"
             className="w-full"
           >
@@ -73,8 +78,7 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
           </Button>
         </div>
         
-        <div className="space-y-4">
-          <div>
+        <div>
             <h3 className="flex items-center mb-2 font-semibold"><History className="mr-2 h-4 w-4" />History</h3>
             <ScrollArea className="h-64 rounded-md border p-2">
               {game.history.length === 0 ? (
@@ -89,7 +93,29 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                 </ol>
               )}
             </ScrollArea>
-          </div>
+        </div>
+
+        <Separator />
+        
+        <div className="space-y-4">
+            <h3 className="flex items-center font-semibold"><Cog className="mr-2 h-4 w-4" />Settings</h3>
+            <div>
+              <Label htmlFor="engine">AI Engine</Label>
+              <Select
+                value={game.engine}
+                onValueChange={(value) => game.setEngine(value as EngineType)}
+                disabled={game.isLoadingAiMove || game.history.length > 0}
+              >
+                <SelectTrigger id="engine">
+                  <SelectValue placeholder="Select engine" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="stockfish">Stockfish</SelectItem>
+                  <SelectItem value="crafty">Crafty</SelectItem>
+                </SelectContent>
+              </Select>
+               {game.history.length > 0 && <p className="text-xs text-muted-foreground mt-1">Start a new game to change engine.</p>}
+            </div>
             <div>
               <Label htmlFor="fen">Load from FEN</Label>
               <div className="flex space-x-2">

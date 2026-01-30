@@ -6,10 +6,9 @@ import type {
   HistoryItem,
   GameStatus,
   Move,
+  EngineType,
 } from '@/lib/types';
 import { suggestBestMove } from '@/ai/flows/suggest-best-move';
-
-const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 export const useChessGame = () => {
   const [game, setGame] = useState(new Chess());
@@ -18,6 +17,7 @@ export const useChessGame = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isAITurn, setIsAITurn] = useState(false);
   const [isLoadingAiMove, setIsLoadingAiMove] = useState(false);
+  const [engine, setEngine] = useState<EngineType>('stockfish');
 
   const { toast } = useToast();
 
@@ -47,7 +47,7 @@ export const useChessGame = () => {
         try {
           const { move: aiMove } = await suggestBestMove({
             fen: game.fen(),
-            engine: 'stockfish',
+            engine: engine,
             level: 5,
           });
 
@@ -78,7 +78,7 @@ export const useChessGame = () => {
       // Delay AI move slightly for better UX
       setTimeout(getAiMove, 500);
     }
-  }, [isAITurn, status, game, updateGame, toast]);
+  }, [isAITurn, status, game, updateGame, toast, engine]);
 
   const newGame = useCallback(() => {
     const newGameInstance = new Chess();
@@ -146,6 +146,8 @@ export const useChessGame = () => {
     isAITurn,
     isLoadingAiMove,
     lastMove,
+    engine,
+    setEngine,
     newGame,
     undoMove,
     loadFen,
