@@ -15,6 +15,8 @@
   "aiEngine": "AI Engine",
   "engine.stockfish": "Stockfish",
   "engine.crafty": "Crafty",
+  "engine.fruit": "Fruit",
+  "engine.toga2": "Toga II",
   "engineChangeNote": "Start a new game to change engine.",
   "loadFen": "Load from FEN",
   "load": "Load",
