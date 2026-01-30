@@ -10,20 +10,34 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import https from 'https';
 
 const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
-  engine: z.enum(['stockfish', 'crafty', 'fruit', 'toga2']).default('stockfish').describe('The chess engine to use.'),
-  level: z.number().int().min(1).max(20).default(5).describe('The skill level of the chess engine.'),
+  engine: z
+    .enum(['stockfish', 'crafty', 'fruit', 'toga2'])
+    .default('stockfish')
+    .describe('The chess engine to use.'),
+  level: z
+    .number()
+    .int()
+    .min(1)
+    .max(20)
+    .default(5)
+    .describe('The skill level of the chess engine.'),
 });
 export type SuggestBestMoveInput = z.infer<typeof SuggestBestMoveInputSchema>;
 
 const SuggestBestMoveOutputSchema = z.object({
   move: z.string().describe('The best move suggested by the AI chess engine.'),
 });
-export type SuggestBestMoveOutput = z.infer<typeof SuggestBestMoveOutputSchema>;
+export type SuggestBestMoveOutput = z.infer<
+  typeof SuggestBestMoveOutputSchema
+>;
 
-export async function suggestBestMove(input: SuggestBestMoveInput): Promise<SuggestBestMoveOutput> {
+export async function suggestBestMove(
+  input: SuggestBestMoveInput
+): Promise<SuggestBestMoveOutput> {
   return suggestBestMoveFlow(input);
 }
 
@@ -34,7 +48,11 @@ const suggestBestMoveFlow = ai.defineFlow(
     outputSchema: SuggestBestMoveOutputSchema,
   },
   async input => {
-    const apiUrl = 'http://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+
+    const agent = new https.Agent({
+      rejectUnauthorized: false,
+    });
 
     try {
       const response = await fetch(apiUrl, {
@@ -43,6 +61,8 @@ const suggestBestMoveFlow = ai.defineFlow(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(input),
+        // @ts-ignore
+        agent: agent,
       });
 
       if (!response.ok) {
@@ -52,7 +72,7 @@ const suggestBestMoveFlow = ai.defineFlow(
       const data = await response.json();
 
       if (data.success) {
-        return { move: data.response.move };
+        return {move: data.response.move};
       } else {
         throw new Error(`API Error: ${data.message}`);
       }
