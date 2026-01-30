@@ -10,6 +10,14 @@ import type {
 } from '@/lib/types';
 import { suggestBestMove } from '@/ai/flows/suggest-best-move';
 
+// Helper to create a new game instance from an existing one, preserving history
+const cloneGame = (game: Chess): Chess => {
+  const newGame = new Chess();
+  // Using loadPgn is the way to clone a game and preserve history with chess.js v1+
+  newGame.loadPgn(game.pgn());
+  return newGame;
+};
+
 export const useChessGame = () => {
   const [game, setGame] = useState(new Chess());
   const [position, setPosition] = useState(game.fen());
@@ -53,7 +61,7 @@ export const useChessGame = () => {
             level: 5,
           });
 
-          const gameCopy = new Chess(game.fen());
+          const gameCopy = cloneGame(game);
           if (gameCopy.move(aiMove)) {
             setGame(gameCopy);
             updateGame(gameCopy);
@@ -80,13 +88,18 @@ export const useChessGame = () => {
       // Delay AI move slightly for better UX
       setTimeout(getAiMove, 500);
     }
-  }, [isAITurn, status, game, updateGame, toast, engine]);
+  }, [isAITurn, status, game, updateGame, toast, engine, playerColor]);
 
   const newGame = useCallback((color: 'w' | 'b' = 'w') => {
     const newGameInstance = new Chess();
     setGame(newGameInstance);
     setPlayerColor(color);
     updateGame(newGameInstance, color);
+
+    if (color === 'b') {
+        const aiColor = 'w';
+        setIsAITurn(newGameInstance.turn() === aiColor);
+    }
   }, [updateGame]);
 
   const loadFen = useCallback((fen: string) => {
@@ -103,18 +116,18 @@ export const useChessGame = () => {
   }, [updateGame]);
 
   const undoMove = useCallback(() => {
-    const newGameInstance = new Chess(game.fen());
+    const gameCopy = cloneGame(game);
     // Undo twice: player's move and AI's move
-    newGameInstance.undo();
-    newGameInstance.undo(); 
-    setGame(newGameInstance);
-    updateGame(newGameInstance);
+    gameCopy.undo();
+    gameCopy.undo(); 
+    setGame(gameCopy);
+    updateGame(gameCopy);
   }, [game, updateGame]);
 
   const onDrop = (sourceSquare: Square, targetSquare: Square): boolean => {
     if (isAITurn) return false;
 
-    const gameCopy = new Chess(game.fen());
+    const gameCopy = cloneGame(game);
     try {
         const move = gameCopy.move({
             from: sourceSquare,
