@@ -27,7 +27,7 @@ export default function Home() {
               position={game.position}
               onPieceDrop={game.onDrop}
               lastMove={game.lastMove}
-              isFlipped={false}
+              isFlipped={game.playerColor === 'b'}
               isAITurn={game.isAITurn}
               isLoadingAiMove={game.isLoadingAiMove}
             />

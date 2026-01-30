@@ -24,5 +24,9 @@
   "loadFenSuccess": "Jogo carregado a partir de FEN.",
   "loadFenError": "String FEN inválida.",
   "aiThinking": "A IA está a pensar...",
-  "language": "Idioma"
+  "language": "Idioma",
+  "playAs": "Jogar como",
+  "white": "Brancas",
+  "black": "Pretas",
+  "playAsNote": "Selecione o seu lado para o próximo novo jogo."
 }

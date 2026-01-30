@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import type { EngineType, HistoryItem } from '@/lib/types';
 import { useTranslation, type Locale } from '@/i18n/provider';
+import { Switch } from '@/components/ui/switch';
 
 
 type GameSidebarProps = {
@@ -27,6 +28,7 @@ type GameSidebarProps = {
 
 export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
   const [fen, setFen] = useState('');
+  const [sideForNewGame, setSideForNewGame] = useState<'w' | 'b'>('w');
   const { toast } = useToast();
   const { t, locale, setLocale, locales } = useTranslation();
 
@@ -72,7 +74,7 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex space-x-2">
-          <Button onClick={game.newGame} className="w-full">
+          <Button onClick={() => game.newGame(sideForNewGame)} className="w-full">
             <RotateCcw className="mr-2 h-4 w-4" /> {t('newGame')}
           </Button>
           <Button
@@ -123,6 +125,19 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div>
+              <Label>{t('playAs')}</Label>
+              <div className="flex items-center space-x-2 mt-1">
+                  <span>{t('white')}</span>
+                  <Switch
+                      id="play-as-switch"
+                      checked={sideForNewGame === 'b'}
+                      onCheckedChange={(checked) => setSideForNewGame(checked ? 'b' : 'w')}
+                  />
+                  <span>{t('black')}</span>
+              </div>
+               <p className="text-xs text-muted-foreground mt-1">{t('playAsNote')}</p>
             </div>
             <div>
               <Label htmlFor="engine">{t('aiEngine')}</Label>

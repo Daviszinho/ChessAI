@@ -18,17 +18,18 @@ export const useChessGame = () => {
   const [isAITurn, setIsAITurn] = useState(false);
   const [isLoadingAiMove, setIsLoadingAiMove] = useState(false);
   const [engine, setEngine] = useState<EngineType>('stockfish');
-
+  const [playerColor, setPlayerColor] = useState<'w' | 'b'>('w');
   const { toast } = useToast();
 
-  const updateGame = useCallback((gameInstance: Chess) => {
+  const updateGame = useCallback((gameInstance: Chess, newPlayerColor?: 'w' | 'b') => {
+    const currentPlayerColor = newPlayerColor || playerColor;
     setPosition(gameInstance.fen());
     const moves = gameInstance.history({ verbose: true });
     setHistory(
-      moves.map((move, i) => ({
+      moves.map((move) => ({
         san: move.san,
-        fen: gameInstance.history({ verbose: true })[i].after,
-        by: move.color === 'w' ? 'player' : 'ai',
+        fen: move.after,
+        by: move.color === currentPlayerColor ? 'player' : 'ai',
       }))
     );
 
@@ -37,8 +38,9 @@ export const useChessGame = () => {
     else if (gameInstance.isDraw()) setStatus('draw');
     else setStatus('in-progress');
 
-    setIsAITurn(gameInstance.turn() === 'b');
-  }, []);
+    const aiColor = currentPlayerColor === 'w' ? 'b' : 'w';
+    setIsAITurn(gameInstance.turn() === aiColor);
+  }, [playerColor]);
 
   useEffect(() => {
     if (isAITurn && status === 'in-progress') {
@@ -80,17 +82,20 @@ export const useChessGame = () => {
     }
   }, [isAITurn, status, game, updateGame, toast, engine]);
 
-  const newGame = useCallback(() => {
+  const newGame = useCallback((color: 'w' | 'b' = 'w') => {
     const newGameInstance = new Chess();
     setGame(newGameInstance);
-    updateGame(newGameInstance);
+    setPlayerColor(color);
+    updateGame(newGameInstance, color);
   }, [updateGame]);
 
   const loadFen = useCallback((fen: string) => {
     try {
       const newGameInstance = new Chess(fen);
+      const player = newGameInstance.turn();
       setGame(newGameInstance);
-      updateGame(newGameInstance);
+      setPlayerColor(player);
+      updateGame(newGameInstance, player);
       return true;
     } catch (e) {
       return false;
@@ -147,6 +152,7 @@ export const useChessGame = () => {
     isLoadingAiMove,
     lastMove,
     engine,
+    playerColor,
     setEngine,
     newGame,
     undoMove,

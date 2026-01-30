@@ -24,5 +24,9 @@
   "loadFenSuccess": "Game loaded from FEN.",
   "loadFenError": "Invalid FEN string.",
   "aiThinking": "AI is thinking...",
-  "language": "Language"
+  "language": "Language",
+  "playAs": "Play as",
+  "white": "White",
+  "black": "Black",
+  "playAsNote": "Select your side for the next new game."
 }

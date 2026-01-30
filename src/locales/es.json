@@ -24,5 +24,9 @@
   "loadFenSuccess": "Juego cargado desde FEN.",
   "loadFenError": "Cadena FEN inválida.",
   "aiThinking": "La IA está pensando...",
-  "language": "Idioma"
+  "language": "Idioma",
+  "playAs": "Jugar como",
+  "white": "Blancas",
+  "black": "Negras",
+  "playAsNote": "Selecciona tu bando para la próxima partida."
 }
