@@ -73,8 +73,8 @@ export const Chessboard: FC<ChessboardProps> = ({
           borderRadius: 'var(--radius)',
         }}
         customSquareStyles={customSquareStyles}
-        customLightSquareStyle={{ backgroundColor: 'yellow' }}
-        customDarkSquareStyle={{ backgroundColor: 'green' }}
+        customLightSquareStyle={{ backgroundColor: 'hsl(var(--board-light))' }}
+        customDarkSquareStyle={{ backgroundColor: 'hsl(var(--board-dark))' }}
       />
     </div>
   );

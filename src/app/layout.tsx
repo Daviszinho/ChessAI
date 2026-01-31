@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  themeColor: '#100a09',
+  themeColor: '#1c1917',
 };
 
 export default function RootLayout({

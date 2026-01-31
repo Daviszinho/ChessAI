@@ -37,6 +37,8 @@
     --sidebar-accent-foreground: 24 9.8% 10%;
     --sidebar-border: 60 10% 75%;
     --sidebar-ring: 120 61% 34%;
+    --board-light: 60 56% 91%;
+    --board-dark: 120 61% 34%;
   }
 
   .dark {
@@ -67,6 +69,8 @@
     --sidebar-accent-foreground: 60 9.1% 97.8%;
     --sidebar-border: 12 6.5% 15.1%;
     --sidebar-ring: 120 61% 34%;
+    --board-light: 60 56% 91%;
+    --board-dark: 120 61% 34%;
   }
 }
 
