@@ -14,7 +14,7 @@
   "settings": "Settings",
   "aiEngine": "AI Engine",
   "engine.stockfish": "Stockfish",
-  "engine.crafty": "Crafty",
+  "engine.gnuchess": "GnuChess",
   "engine.fruit": "Fruit",
   "engine.toga2": "Toga II",
   "engineChangeNote": "Start a new game to change engine.",

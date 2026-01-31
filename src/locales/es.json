@@ -14,7 +14,7 @@
   "settings": "Configuración",
   "aiEngine": "Motor de IA",
   "engine.stockfish": "Stockfish",
-  "engine.crafty": "Crafty",
+  "engine.gnuchess": "GnuChess",
   "engine.fruit": "Fruit",
   "engine.toga2": "Toga II",
   "engineChangeNote": "Inicia un nuevo juego para cambiar el motor.",

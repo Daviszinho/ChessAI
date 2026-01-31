@@ -21,4 +21,4 @@ export type ChessPiece = {
 
 export type Move = { from: Square; to: Square; promotion?: Piece['type'] };
 
-export type EngineType = 'stockfish' | 'crafty' | 'fruit' | 'toga2';
+export type EngineType = 'stockfish' | 'gnuchess' | 'fruit' | 'toga2';
