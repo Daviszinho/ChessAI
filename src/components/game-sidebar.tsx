@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FC } from 'react';
 import {
   RotateCcw,
@@ -27,10 +27,16 @@ type GameSidebarProps = {
 };
 
 export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
-  const [fen, setFen] = useState('');
+  const [fen, setFen] = useState(game.position);
   const [sideForNewGame, setSideForNewGame] = useState<'w' | 'b'>('w');
   const { toast } = useToast();
   const { t, locale, setLocale, locales } = useTranslation();
+
+  useEffect(() => {
+    if (game.position) {
+      setFen(game.position);
+    }
+  }, [game.position]);
 
   const handleLoadFen = () => {
     if (game.loadFen(fen)) {
