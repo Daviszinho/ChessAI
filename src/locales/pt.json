@@ -32,5 +32,7 @@
   "black": "Pretas",
   "playAsNote": "Selecione o seu lado para o próximo novo jogo.",
   "exportPgn": "Exportar PGN",
-  "pgnCopied": "PGN copiado para a área de transferência."
+  "pgnCopied": "PGN copiado para a área de transferência.",
+  "promotePawn": "Promover Peão",
+  "promotePawnDescription": "Escolha uma peça para promover o seu peão."
 }

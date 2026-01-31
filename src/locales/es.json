@@ -32,5 +32,7 @@
   "black": "Negras",
   "playAsNote": "Selecciona tu bando para la próxima partida.",
   "exportPgn": "Exportar PGN",
-  "pgnCopied": "PGN copiado al portapapeles."
+  "pgnCopied": "PGN copiado al portapapeles.",
+  "promotePawn": "Coronar Peón",
+  "promotePawnDescription": "Elige una pieza para coronar tu peón."
 }

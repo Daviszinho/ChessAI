@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Chess, type Square } from 'chess.js';
+import { Chess, type Square, type PieceSymbol } from 'chess.js';
 import { useToast } from '@/hooks/use-toast';
 import type {
   HistoryItem,
@@ -27,11 +27,14 @@ export const useChessGame = () => {
   const [isLoadingAiMove, setIsLoadingAiMove] = useState(false);
   const [engine, setEngine] = useState<EngineType>('stockfish');
   const [playerColor, setPlayerColor] = useState<'w' | 'b'>('w');
+  const [turn, setTurn] = useState(game.turn());
+  const [promotionToSelect, setPromotionToSelect] = useState<{from: Square, to: Square} | null>(null);
   const { toast } = useToast();
 
   const updateGame = useCallback((gameInstance: Chess, newPlayerColor?: 'w' | 'b') => {
     const currentPlayerColor = newPlayerColor || playerColor;
     setPosition(gameInstance.fen());
+    setTurn(gameInstance.turn());
     const moves = gameInstance.history({ verbose: true });
     setHistory(
       moves.map((move) => ({
@@ -124,6 +127,30 @@ export const useChessGame = () => {
     updateGame(gameCopy);
   }, [game, updateGame]);
 
+  const handlePromotion = useCallback((piece: PieceSymbol) => {
+    if (!promotionToSelect) return;
+
+    // if they select queen again, just close the dialog
+    if (piece === 'q') {
+        setPromotionToSelect(null);
+        return;
+    }
+
+    const gameCopy = cloneGame(game);
+    gameCopy.undo(); // Undo the automatic queen promotion
+    const move = gameCopy.move({
+        ...promotionToSelect,
+        promotion: piece
+    });
+
+    if (move) {
+        setGame(gameCopy);
+        updateGame(gameCopy);
+    }
+    
+    setPromotionToSelect(null);
+  }, [game, promotionToSelect, updateGame]);
+
   const onDrop = (sourceSquare: Square, targetSquare: Square): boolean => {
     if (isAITurn) return false;
 
@@ -132,19 +159,25 @@ export const useChessGame = () => {
         const move = gameCopy.move({
             from: sourceSquare,
             to: targetSquare,
-            promotion: 'q', // NOTE: always promote to a queen for example simplicity
+            promotion: 'q', // default to queen
         });
         
-        // illegal move
         if (move === null) {
             return false;
         }
 
         setGame(gameCopy);
         updateGame(gameCopy);
+
+        // If it was a promotion, open the dialog to allow changing the piece
+        if (move.flags.includes('p')) {
+            setPromotionToSelect({ from: sourceSquare, to: targetSquare });
+        }
+
         return true;
 
     } catch (error) {
+        // chess.js v1 can throw on invalid move
         return false;
     }
   };
@@ -166,11 +199,14 @@ export const useChessGame = () => {
     lastMove,
     engine,
     playerColor,
+    turn,
+    promotionToSelect,
     pgn: game.pgn(),
     setEngine,
     newGame,
     undoMove,
     loadFen,
     onDrop,
+    handlePromotion,
   };
 };
