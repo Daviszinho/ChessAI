@@ -128,22 +128,6 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
         
         <div className="space-y-4">
             <h3 className="flex items-center font-semibold"><Cog className="mr-2 h-4 w-4" />{t('settings')}</h3>
-             <div>
-              <Label htmlFor="language">{t('language')}</Label>
-              <Select
-                value={locale}
-                onValueChange={(value) => setLocale(value as Locale)}
-              >
-                <SelectTrigger id="language">
-                  <SelectValue placeholder="Select language" />
-                </SelectTrigger>
-                <SelectContent>
-                  {locales.map((loc) => (
-                    <SelectItem key={loc} value={loc}>{loc.toUpperCase()}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
             <div>
               <Label>{t('playAs')}</Label>
               <div className="flex items-center space-x-2 mt-1">
@@ -188,6 +172,22 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                 <Button onClick={handleLoadFen}>{t('load')}</Button>
               </div>
           </div>
+          <div>
+              <Label htmlFor="language">{t('language')}</Label>
+              <Select
+                value={locale}
+                onValueChange={(value) => setLocale(value as Locale)}
+              >
+                <SelectTrigger id="language">
+                  <SelectValue placeholder="Select language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locales.map((loc) => (
+                    <SelectItem key={loc} value={loc}>{loc.toUpperCase()}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
         </div>
       </CardContent>
     </Card>
