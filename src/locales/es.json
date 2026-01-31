@@ -17,6 +17,8 @@
   "engine.gnuchess": "GnuChess",
   "engine.fruit": "Fruit",
   "engine.toga2": "Toga II",
+  "engine.sjeng": "Sjeng",
+  "engine.phalanx": "Phalanx",
   "engineChangeNote": "Inicia un nuevo juego para cambiar el motor.",
   "loadFen": "Cargar desde FEN",
   "load": "Cargar",

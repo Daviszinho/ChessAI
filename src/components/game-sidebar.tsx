@@ -156,6 +156,8 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                   <SelectItem value="gnuchess">{t('engine.gnuchess')}</SelectItem>
                   <SelectItem value="fruit">{t('engine.fruit')}</SelectItem>
                   <SelectItem value="toga2">{t('engine.toga2')}</SelectItem>
+                  <SelectItem value="sjeng">{t('engine.sjeng')}</SelectItem>
+                  <SelectItem value="phalanx">{t('engine.phalanx')}</SelectItem>
                 </SelectContent>
               </Select>
                {game.history.length > 0 && <p className="text-xs text-muted-foreground mt-1">{t('engineChangeNote')}</p>}
