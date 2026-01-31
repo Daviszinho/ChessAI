@@ -166,6 +166,7 @@ export const useChessGame = () => {
     lastMove,
     engine,
     playerColor,
+    pgn: game.pgn(),
     setEngine,
     newGame,
     undoMove,

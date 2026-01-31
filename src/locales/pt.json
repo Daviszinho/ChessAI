@@ -8,7 +8,7 @@
   "stalemate": "Empate por Afogamento!",
   "draw": "Empate!",
   "newGame": "Novo Jogo",
-  "undo": "Desfazer",
+  "undo": "Desfacer",
   "history": "Histórico",
   "noMoves": "Nenhum movimento ainda.",
   "settings": "Configurações",
@@ -28,5 +28,7 @@
   "playAs": "Jogar como",
   "white": "Brancas",
   "black": "Pretas",
-  "playAsNote": "Selecione o seu lado para o próximo novo jogo."
+  "playAsNote": "Selecione o seu lado para o próximo novo jogo.",
+  "exportPgn": "Exportar PGN",
+  "pgnCopied": "PGN copiado para a área de transferência."
 }

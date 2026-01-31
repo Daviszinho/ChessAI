@@ -7,6 +7,7 @@ import {
   History,
   Cog,
   Languages,
+  ClipboardCopy,
 } from 'lucide-react';
 import type { useChessGame } from '@/hooks/use-chess-game';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,14 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
         variant: 'destructive',
         title: t('errorTitle'),
         description: t('loadFenError'),
+      });
+    }
+  };
+
+  const handleExportPgn = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(game.pgn).then(() => {
+        toast({ title: t('pgnCopied') });
       });
     }
   };
@@ -110,6 +119,9 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                 </ol>
               )}
             </ScrollArea>
+            <Button onClick={handleExportPgn} variant="outline" className="w-full mt-2" disabled={game.history.length === 0}>
+              <ClipboardCopy className="mr-2 h-4 w-4" /> {t('exportPgn')}
+            </Button>
         </div>
 
         <Separator />

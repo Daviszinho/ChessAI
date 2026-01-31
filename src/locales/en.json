@@ -28,5 +28,7 @@
   "playAs": "Play as",
   "white": "White",
   "black": "Black",
-  "playAsNote": "Select your side for the next new game."
+  "playAsNote": "Select your side for the next new game.",
+  "exportPgn": "Export PGN",
+  "pgnCopied": "PGN copied to clipboard."
 }
