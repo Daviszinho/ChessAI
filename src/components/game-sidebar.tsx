@@ -154,12 +154,12 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
                   <SelectValue placeholder="Select engine" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="stockfish">{t('engine.stockfish')}</SelectItem>
-                  <SelectItem value="gnuchess">{t('engine.gnuchess')}</SelectItem>
-                  <SelectItem value="toga2">{t('engine.toga2')}</SelectItem>
-                  <SelectItem value="sjeng">{t('engine.sjeng')}</SelectItem>
-                  <SelectItem value="phalanx">{t('engine.phalanx')}</SelectItem>
                   <SelectItem value="glaurung">{t('engine.glaurung')}</SelectItem>
+                  <SelectItem value="gnuchess">{t('engine.gnuchess')}</SelectItem>
+                  <SelectItem value="phalanx">{t('engine.phalanx')}</SelectItem>
+                  <SelectItem value="sjeng">{t('engine.sjeng')}</SelectItem>
+                  <SelectItem value="stockfish">{t('engine.stockfish')}</SelectItem>
+                  <SelectItem value="toga2">{t('engine.toga2')}</SelectItem>
                 </SelectContent>
               </Select>
                {game.history.length > 0 && <p className="text-xs text-muted-foreground mt-1">{t('engineChangeNote')}</p>}
