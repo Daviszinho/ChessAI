@@ -62,7 +62,6 @@ const suggestBestMoveFlow = ai.defineFlow(
         'Content-Length': Buffer.byteLength(postData),
       },
       rejectUnauthorized: false, // Bypass SSL certificate validation
-      timeout: 15000, // Add a 15-second timeout
     };
 
     return new Promise((resolve, reject) => {
@@ -93,11 +92,6 @@ const suggestBestMoveFlow = ai.defineFlow(
         });
       });
 
-      req.on('timeout', () => {
-        req.destroy();
-        reject(new Error('Request to AI engine timed out after 15 seconds.'));
-      });
-      
       req.on('error', e => {
         console.error('Error fetching best move:', e);
         reject(new Error(`Failed to get best move: ${e.message}`));
