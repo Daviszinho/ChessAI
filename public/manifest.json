@@ -2,15 +2,15 @@
   "name": "ChessAI",
   "short_name": "ChessAI",
   "description": "An intelligent chess game powered by AI.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#1c1917",
-  "theme_color": "#1c1917",
   "icons": [
     {
       "src": "/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
-  ]
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f0e8",
+  "theme_color": "#1c1917"
 }
