@@ -65,7 +65,31 @@ export const useChessGame = () => {
           });
 
           const gameCopy = cloneGame(game);
-          if (gameCopy.move(aiMove)) {
+          
+          // The API for 'sjeng' returns moves like 'g1f3' which chess.js doesn't understand directly.
+          // We need to convert it to a format it accepts, like { from: 'g1', to: 'f3' }.
+          // We will try the move as is first (for SAN), and if it fails, try the coordinate format.
+          let moveResult = null;
+          try {
+            moveResult = gameCopy.move(aiMove);
+          } catch(e) {
+            // chess.js v1 can throw on invalid move string
+          }
+
+          if (!moveResult && aiMove && aiMove.length >= 4) {
+            try {
+              moveResult = gameCopy.move({
+                from: aiMove.substring(0, 2) as Square,
+                to: aiMove.substring(2, 4) as Square,
+                // Handle promotions for this format too, e.g., e7e8q
+                promotion: aiMove.length === 5 ? aiMove.substring(4, 5) as PieceSymbol : undefined,
+              });
+            } catch(e) {
+                // Ignore errors from trying to make a move, we'll handle the null moveResult below
+            }
+          }
+
+          if (moveResult) {
             setGame(gameCopy);
             updateGame(gameCopy);
           } else {
@@ -73,7 +97,7 @@ export const useChessGame = () => {
             toast({
               variant: 'destructive',
               title: 'AI Error',
-              description: 'AI returned an invalid move.',
+              description: `AI returned an invalid move: ${aiMove}`,
             });
           }
         } catch (error: any) {
