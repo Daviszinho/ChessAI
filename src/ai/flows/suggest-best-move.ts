@@ -15,7 +15,7 @@ import https from 'https';
 const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
   engine: z
-    .enum(['stockfish', 'gnuchess', 'fruit', 'toga2', 'sjeng', 'phalanx'])
+    .enum(['stockfish', 'gnuchess', 'toga2', 'sjeng', 'phalanx'])
     .default('stockfish')
     .describe('The chess engine to use.'),
   level: z
@@ -60,6 +60,7 @@ const suggestBestMoveFlow = ai.defineFlow(
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData),
+        'Connection': 'close'
       },
       rejectUnauthorized: false, // Bypass SSL certificate validation
     };
