@@ -16,6 +16,7 @@ const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
   engine: z
     .enum([
+      'fruit',
       'glaurung',
       'gnuchess',
       'phalanx',
