@@ -1,3 +1,4 @@
+
 {
   "title": "XadrezIA",
   "description": "O jogo de xadrez inteligente.",
@@ -13,11 +14,13 @@
   "noMoves": "Nenhum movimento ainda.",
   "settings": "Configurações",
   "aiEngine": "Motor de IA",
-  "engine.stockfish": "Stockfish",
-  "engine.gnuchess": "GnuChess",
-  "engine.toga2": "Toga II",
-  "engine.sjeng": "Sjeng",
-  "engine.phalanx": "Phalanx",
+  "engine": {
+    "stockfish": "Stockfish",
+    "gnuchess": "GnuChess",
+    "toga2": "Toga II",
+    "sjeng": "Sjeng",
+    "phalanx": "Phalanx"
+  },
   "engineChangeNote": "Comece um novo jogo para mudar o motor.",
   "loadFen": "Carregar de FEN",
   "load": "Carregar",
@@ -35,8 +38,10 @@
   "promotePawn": "Promover Peão",
   "promotePawnDescription": "Escolha uma peça para promover o seu peão.",
   "boardTheme": "Cores do Tabuleiro",
-  "theme.default": "Verde (Padrão)",
-  "theme.brown": "Marrom",
-  "theme.blue": "Azul",
-  "theme.gray": "Cinza"
+  "theme": {
+    "default": "Verde (Padrão)",
+    "brown": "Marrom",
+    "blue": "Azul",
+    "gray": "Cinza"
+  }
 }
