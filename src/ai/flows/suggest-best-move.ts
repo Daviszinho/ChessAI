@@ -10,7 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import http from 'http';
+import https from 'https';
 
 const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
@@ -56,24 +56,23 @@ const suggestBestMoveFlow = ai.defineFlow(
     outputSchema: SuggestBestMoveOutputSchema,
   },
   async input => {
-    const apiUrl = 'http://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
     const postData = JSON.stringify(input);
     const url = new URL(apiUrl);
 
     const options = {
       hostname: url.hostname,
-      port: url.port || 80,
+      port: url.port || 443,
       path: url.pathname,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(postData),
-        'Connection': 'close'
       },
     };
 
     return new Promise((resolve, reject) => {
-      const req = http.request(options, res => {
+      const req = https.request(options, res => {
         let data = '';
         res.on('data', chunk => {
           data += chunk;
