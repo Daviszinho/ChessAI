@@ -25,9 +25,11 @@ import { Switch } from '@/components/ui/switch';
 
 type GameSidebarProps = {
   game: ReturnType<typeof useChessGame>;
+  boardTheme: string;
+  setBoardTheme: (theme: string) => void;
 };
 
-export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
+export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTheme }) => {
   const [fen, setFen] = useState(game.position);
   const [sideForNewGame, setSideForNewGame] = useState<'w' | 'b'>('w');
   const { toast } = useToast();
@@ -173,6 +175,23 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game }) => {
                 <Button onClick={handleLoadFen}>{t('load')}</Button>
               </div>
           </div>
+          <div>
+              <Label htmlFor="board-theme">{t('boardTheme')}</Label>
+              <Select
+                value={boardTheme}
+                onValueChange={setBoardTheme}
+              >
+                <SelectTrigger id="board-theme">
+                  <SelectValue placeholder="Select theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="default">{t('theme.default')}</SelectItem>
+                  <SelectItem value="brown">{t('theme.brown')}</SelectItem>
+                  <SelectItem value="blue">{t('theme.blue')}</SelectItem>
+                  <SelectItem value="gray">{t('theme.gray')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           <div>
               <Label htmlFor="language">{t('language')}</Label>
               <Select

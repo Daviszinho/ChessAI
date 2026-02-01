@@ -82,7 +82,7 @@ const suggestBestMoveFlow = ai.defineFlow(
                   reject(new Error('API response missing expected move data.'));
                 }
               } else {
-                reject(new Error(`API Error: ${jsonData.message || 'Unknown API error'}`));
+                reject(new Error(`API Error: ${jsonData.error || jsonData.message || 'Unknown API error'}`));
               }
             } else {
               reject(new Error(`HTTP error! Status: ${res.statusCode}, Body: ${data}`));

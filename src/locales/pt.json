@@ -33,5 +33,10 @@
   "exportPgn": "Exportar PGN",
   "pgnCopied": "PGN copiado para a área de transferência.",
   "promotePawn": "Promover Peão",
-  "promotePawnDescription": "Escolha uma peça para promover o seu peão."
+  "promotePawnDescription": "Escolha uma peça para promover o seu peão.",
+  "boardTheme": "Cores do Tabuleiro",
+  "theme.default": "Verde (Padrão)",
+  "theme.brown": "Marrom",
+  "theme.blue": "Azul",
+  "theme.gray": "Cinza"
 }

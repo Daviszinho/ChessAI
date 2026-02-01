@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Chessboard } from '@/components/chessboard';
 import { GameSidebar } from '@/components/game-sidebar';
 import { useChessGame } from '@/hooks/use-chess-game';
@@ -10,6 +11,14 @@ import { PromotionDialog } from '@/components/promotion-dialog';
 export default function Home() {
   const game = useChessGame();
   const { t } = useTranslation();
+  const [boardTheme, setBoardTheme] = useState('default');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-board-theme', boardTheme);
+    return () => {
+      document.documentElement.removeAttribute('data-board-theme');
+    };
+  }, [boardTheme]);
 
   const promotingColor = game.turn === 'w' ? 'b' : 'w';
 
@@ -38,7 +47,11 @@ export default function Home() {
             </Card>
           </div>
           <div className="w-full md:w-[320px] md:shrink-0">
-            <GameSidebar game={game} />
+            <GameSidebar
+              game={game}
+              boardTheme={boardTheme}
+              setBoardTheme={setBoardTheme}
+            />
           </div>
         </main>
       </div>

@@ -33,5 +33,10 @@
   "exportPgn": "Exportar PGN",
   "pgnCopied": "PGN copiado al portapapeles.",
   "promotePawn": "Coronar Peón",
-  "promotePawnDescription": "Elige una pieza para coronar tu peón."
+  "promotePawnDescription": "Elige una pieza para coronar tu peón.",
+  "boardTheme": "Colores del Tablero",
+  "theme.default": "Verde (Defecto)",
+  "theme.brown": "Marrón",
+  "theme.blue": "Azul",
+  "theme.gray": "Gris"
 }
