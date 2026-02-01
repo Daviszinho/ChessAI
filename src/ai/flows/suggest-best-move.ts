@@ -62,6 +62,7 @@ const suggestBestMoveFlow = ai.defineFlow(
         'Content-Length': Buffer.byteLength(postData),
       },
       rejectUnauthorized: false, // Bypass SSL certificate validation
+      timeout: 15000, // Add a 15-second timeout
     };
 
     return new Promise((resolve, reject) => {
@@ -75,19 +76,28 @@ const suggestBestMoveFlow = ai.defineFlow(
             if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
               const jsonData = JSON.parse(data);
               if (jsonData.success) {
-                resolve({move: jsonData.response.move});
+                if (jsonData.response && jsonData.response.move) {
+                  resolve({move: jsonData.response.move});
+                } else {
+                  reject(new Error('API response missing expected move data.'));
+                }
               } else {
                 reject(new Error(`API Error: ${jsonData.message || 'Unknown API error'}`));
               }
             } else {
-              reject(new Error(`HTTP error! Status: ${res.statusCode}`));
+              reject(new Error(`HTTP error! Status: ${res.statusCode}, Body: ${data}`));
             }
           } catch (e: any) {
-            reject(new Error(`Failed to parse API response: ${e.message}`));
+            reject(new Error(`Failed to parse API response: ${e.message}. Response body: ${data}`));
           }
         });
       });
 
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Request to AI engine timed out after 15 seconds.'));
+      });
+      
       req.on('error', e => {
         console.error('Error fetching best move:', e);
         reject(new Error(`Failed to get best move: ${e.message}`));
