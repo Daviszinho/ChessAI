@@ -10,12 +10,19 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import https from 'https';
+import http from 'http';
 
 const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
   engine: z
-    .enum(['fruit', 'glaurung', 'gnuchess', 'phalanx', 'sjeng', 'stockfish', 'toga2'])
+    .enum([
+      'glaurung',
+      'gnuchess',
+      'phalanx',
+      'sjeng',
+      'stockfish',
+      'toga2',
+    ])
     .default('stockfish')
     .describe('The chess engine to use.'),
   level: z
@@ -48,13 +55,13 @@ const suggestBestMoveFlow = ai.defineFlow(
     outputSchema: SuggestBestMoveOutputSchema,
   },
   async input => {
-    const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const apiUrl = 'http://daviszinhovm.westus2.cloudapp.azure.com/api/move';
     const postData = JSON.stringify(input);
     const url = new URL(apiUrl);
 
     const options = {
       hostname: url.hostname,
-      port: url.port || 443,
+      port: url.port || 80,
       path: url.pathname,
       method: 'POST',
       headers: {
@@ -62,11 +69,10 @@ const suggestBestMoveFlow = ai.defineFlow(
         'Content-Length': Buffer.byteLength(postData),
         'Connection': 'close'
       },
-      rejectUnauthorized: false, // Bypass SSL certificate validation
     };
 
     return new Promise((resolve, reject) => {
-      const req = https.request(options, res => {
+      const req = http.request(options, res => {
         let data = '';
         res.on('data', chunk => {
           data += chunk;
