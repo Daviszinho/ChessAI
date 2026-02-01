@@ -17,6 +17,10 @@ export const metadata: Metadata = {
     telephone: false,
   },
   themeColor: '#1c1917',
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -26,9 +30,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <head>
-        <link rel="apple-touch-icon" href="/icon.svg"></link>
-      </head>
       <body className="font-body antialiased">
         <I18nProvider>
           {children}
