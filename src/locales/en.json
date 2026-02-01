@@ -19,7 +19,8 @@
     "gnuchess": "GnuChess",
     "toga2": "Toga II",
     "sjeng": "Sjeng",
-    "phalanx": "Phalanx"
+    "phalanx": "Phalanx",
+    "glaurung": "Glaurung"
   },
   "engineChangeNote": "Start a new game to change engine.",
   "loadFen": "Load from FEN",

@@ -26,4 +26,5 @@ export type EngineType =
   | 'gnuchess'
   | 'toga2'
   | 'sjeng'
-  | 'phalanx';
+  | 'phalanx'
+  | 'glaurung';
