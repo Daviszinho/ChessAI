@@ -26,6 +26,5 @@ export type EngineType =
   | 'fruit'
   | 'glaurung'
   | 'phalanx'
-  | 'sjeng'
   | 'stockfish'
   | 'toga2';

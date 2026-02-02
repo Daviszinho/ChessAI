@@ -15,15 +15,7 @@ import https from 'https';
 const SuggestBestMoveInputSchema = z.object({
   fen: z.string().describe('The current board state in FEN notation.'),
   engine: z
-    .enum([
-      'crafty',
-      'fruit',
-      'glaurung',
-      'phalanx',
-      'sjeng',
-      'stockfish',
-      'toga2',
-    ])
+    .enum(['crafty', 'fruit', 'glaurung', 'phalanx', 'stockfish', 'toga2'])
     .default('stockfish')
     .describe('The chess engine to use.'),
   level: z
