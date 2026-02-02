@@ -3,15 +3,18 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { I18nProvider } from '@/i18n/provider';
 
+const title = 'ChessAI';
+const description = 'An intelligent chess game powered by AI.';
+
 export const metadata: Metadata = {
-  title: 'ChessAI',
-  description: 'An intelligent chess game powered by AI.',
+  title: title,
+  description: description,
   manifest: '/manifest.json',
   applicationName: 'ChessAI',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ChessAI',
+    title: title,
   },
   formatDetection: {
     telephone: false,
@@ -20,6 +23,26 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",
+  },
+  openGraph: {
+    title: title,
+    description: description,
+    type: 'website',
+    url: '/',
+    images: [
+      {
+        url: 'https://picsum.photos/seed/chess/1200/630',
+        width: 1200,
+        height: 630,
+        alt: 'A game of chess in progress.',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: title,
+    description: description,
+    images: ['https://picsum.photos/seed/chess/1200/630'],
   },
 };
 
