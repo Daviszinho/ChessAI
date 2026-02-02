@@ -19,7 +19,6 @@ const SuggestBestMoveInputSchema = z.object({
       'crafty',
       'fruit',
       'glaurung',
-      'gnuchess',
       'phalanx',
       'sjeng',
       'stockfish',
@@ -61,7 +60,7 @@ const suggestBestMoveFlow = ai.defineFlow(
     const postData = JSON.stringify(input);
     const url = new URL(apiUrl);
 
-    const options = {
+    const options: https.RequestOptions = {
       hostname: url.hostname,
       port: url.port || 443,
       path: url.pathname,

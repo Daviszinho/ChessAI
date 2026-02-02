@@ -25,7 +25,6 @@ export type EngineType =
   | 'crafty'
   | 'fruit'
   | 'glaurung'
-  | 'gnuchess'
   | 'phalanx'
   | 'sjeng'
   | 'stockfish'
