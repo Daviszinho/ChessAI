@@ -15,6 +15,7 @@
   "settings": "Configuración",
   "aiEngine": "Motor de IA",
   "engine": {
+    "crafty": "Crafty",
     "fruit": "Fruit",
     "glaurung": "Glaurung",
     "gnuchess": "GnuChess",

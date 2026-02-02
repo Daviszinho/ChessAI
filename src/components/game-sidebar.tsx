@@ -154,6 +154,7 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
                   <SelectValue placeholder="Select engine" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="crafty">{t('engine.crafty')}</SelectItem>
                   <SelectItem value="fruit">{t('engine.fruit')}</SelectItem>
                   <SelectItem value="glaurung">{t('engine.glaurung')}</SelectItem>
                   <SelectItem value="gnuchess">{t('engine.gnuchess')}</SelectItem>

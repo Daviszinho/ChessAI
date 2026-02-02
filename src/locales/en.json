@@ -15,6 +15,7 @@
   "settings": "Settings",
   "aiEngine": "AI Engine",
   "engine": {
+    "crafty": "Crafty",
     "fruit": "Fruit",
     "glaurung": "Glaurung",
     "gnuchess": "GnuChess",
