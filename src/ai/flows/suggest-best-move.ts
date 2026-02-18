@@ -48,7 +48,7 @@ const suggestBestMoveFlow = ai.defineFlow(
     outputSchema: SuggestBestMoveOutputSchema,
   },
   async input => {
-    const apiUrl = 'https://daviszinhovm.westus2.cloudapp.azure.com/api/move';
+    const apiUrl = 'https://chessengineapi.calmdesert-d6fcfdbe.centralus.azurecontainerapps.io/api/move';
     const postData = JSON.stringify(input);
     const url = new URL(apiUrl);
 
