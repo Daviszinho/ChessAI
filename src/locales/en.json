@@ -22,7 +22,6 @@
     "stockfish": "Stockfish",
     "toga2": "Toga II"
   },
-  "engineChangeNote": "Start a new game to change engine.",
   "loadFen": "Load from FEN",
   "load": "Load",
   "errorTitle": "Error",

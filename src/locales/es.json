@@ -22,7 +22,6 @@
     "stockfish": "Stockfish",
     "toga2": "Toga II"
   },
-  "engineChangeNote": "Inicia un nuevo juego para cambiar el motor.",
   "loadFen": "Cargar desde FEN",
   "load": "Cargar",
   "errorTitle": "Error",

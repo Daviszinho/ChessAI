@@ -148,7 +148,7 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
               <Select
                 value={game.engine}
                 onValueChange={(value) => game.setEngine(value as EngineType)}
-                disabled={game.isLoadingAiMove || game.history.length > 0}
+                disabled={game.isLoadingAiMove}
               >
                 <SelectTrigger id="engine">
                   <SelectValue placeholder="Select engine" />
@@ -162,7 +162,6 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
                   <SelectItem value="toga2">{t('engine.toga2')}</SelectItem>
                 </SelectContent>
               </Select>
-               {game.history.length > 0 && <p className="text-xs text-muted-foreground mt-1">{t('engineChangeNote')}</p>}
             </div>
             <div>
               <Label htmlFor="fen">{t('loadFen')}</Label>
