@@ -14,14 +14,6 @@
   "noMoves": "No moves yet.",
   "settings": "Settings",
   "aiEngine": "AI Engine",
-  "engine": {
-    "crafty": "Crafty",
-    "fruit": "Fruit",
-    "glaurung": "Glaurung",
-    "phalanx": "Phalanx",
-    "stockfish": "Stockfish",
-    "toga2": "Toga II"
-  },
   "loadFen": "Load from FEN",
   "load": "Load",
   "errorTitle": "Error",
@@ -43,5 +35,7 @@
     "brown": "Brown",
     "blue": "Blue",
     "gray": "Gray"
-  }
+  },
+  "loadEnginesError": "Could not load AI engines.",
+  "loading": "Loading..."
 }

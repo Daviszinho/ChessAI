@@ -34,12 +34,39 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
   const [sideForNewGame, setSideForNewGame] = useState<'w' | 'b'>('w');
   const { toast } = useToast();
   const { t, locale, setLocale, locales } = useTranslation();
+  const [engines, setEngines] = useState<string[]>([]);
+  const [enginesLoading, setEnginesLoading] = useState(true);
 
   useEffect(() => {
     if (game.position) {
       setFen(game.position);
     }
   }, [game.position]);
+  
+  useEffect(() => {
+    const fetchEngines = async () => {
+      try {
+        setEnginesLoading(true);
+        const response = await fetch('/api/engines');
+        if (!response.ok) {
+          throw new Error('Failed to fetch engines');
+        }
+        const data = await response.json();
+        setEngines(data);
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: 'destructive',
+          title: t('errorTitle'),
+          description: t('loadEnginesError'),
+        });
+      } finally {
+        setEnginesLoading(false);
+      }
+    };
+    fetchEngines();
+  }, [t, toast]);
+
 
   const handleLoadFen = () => {
     if (game.loadFen(fen)) {
@@ -148,18 +175,17 @@ export const GameSidebar: FC<GameSidebarProps> = ({ game, boardTheme, setBoardTh
               <Select
                 value={game.engine}
                 onValueChange={(value) => game.setEngine(value as EngineType)}
-                disabled={game.isLoadingAiMove}
+                disabled={game.isLoadingAiMove || enginesLoading}
               >
                 <SelectTrigger id="engine">
-                  <SelectValue placeholder="Select engine" />
+                  <SelectValue placeholder={enginesLoading ? t('loading') : "Select engine"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="crafty">{t('engine.crafty')}</SelectItem>
-                  <SelectItem value="fruit">{t('engine.fruit')}</SelectItem>
-                  <SelectItem value="glaurung">{t('engine.glaurung')}</SelectItem>
-                  <SelectItem value="phalanx">{t('engine.phalanx')}</SelectItem>
-                  <SelectItem value="stockfish">{t('engine.stockfish')}</SelectItem>
-                  <SelectItem value="toga2">{t('engine.toga2')}</SelectItem>
+                  {engines.map((engineId) => (
+                    <SelectItem key={engineId} value={engineId}>
+                      {engineId.charAt(0).toUpperCase() + engineId.slice(1)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

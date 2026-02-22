@@ -14,14 +14,6 @@
   "noMoves": "Nenhum movimento ainda.",
   "settings": "Configurações",
   "aiEngine": "Motor de IA",
-  "engine": {
-    "crafty": "Crafty",
-    "fruit": "Fruit",
-    "glaurung": "Glaurung",
-    "phalanx": "Phalanx",
-    "stockfish": "Stockfish",
-    "toga2": "Toga II"
-  },
   "loadFen": "Carregar de FEN",
   "load": "Carregar",
   "errorTitle": "Erro",
@@ -43,5 +35,7 @@
     "brown": "Marrom",
     "blue": "Azul",
     "gray": "Cinza"
-  }
+  },
+  "loadEnginesError": "Não foi possível carregar os motores de IA.",
+  "loading": "Carregando..."
 }
