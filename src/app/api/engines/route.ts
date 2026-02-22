@@ -14,8 +14,8 @@ export async function GET() {
 
     const jsonData = await response.json();
 
-    if (jsonData.success && Array.isArray(jsonData.response)) {
-      const engines = jsonData.response.map((engine: any) => engine.id);
+    if (jsonData && Array.isArray(jsonData.engines)) {
+      const engines = jsonData.engines.map((engine: any) => engine.name);
       return NextResponse.json(engines);
     } else {
       console.error('API response for engines is not in expected format:', jsonData);
