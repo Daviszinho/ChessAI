@@ -39,6 +39,7 @@ export default function Home() {
 
   return (
     <>
+      <audio id="move-sound" src="https://images.chesscomfiles.com/chess-themes/sounds/_MP3_/default/move-self.mp3" preload="auto" />
       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-2 sm:p-4">
         <header className="mb-4 text-center">
           <h1 className="font-headline text-4xl font-bold text-primary sm:text-5xl">

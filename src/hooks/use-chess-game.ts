@@ -31,6 +31,17 @@ export const useChessGame = () => {
   const [promotionToSelect, setPromotionToSelect] = useState<{from: Square, to: Square} | null>(null);
   const { toast } = useToast();
 
+  const playMoveSound = useCallback(() => {
+    const audio = document.getElementById('move-sound') as HTMLAudioElement;
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(error => {
+        // This can happen if the user hasn't interacted with the page yet.
+        console.error("Error playing move sound:", error);
+      });
+    }
+  }, []);
+
   const updateGame = useCallback((gameInstance: Chess, newPlayerColor?: 'w' | 'b') => {
     const currentPlayerColor = newPlayerColor || playerColor;
     setPosition(gameInstance.fen());
@@ -92,6 +103,7 @@ export const useChessGame = () => {
           if (moveResult) {
             setGame(gameCopy);
             updateGame(gameCopy);
+            playMoveSound();
           } else {
             console.error('API move is invalid', aiMove);
             toast({
@@ -115,7 +127,7 @@ export const useChessGame = () => {
       // Delay AI move slightly for better UX
       setTimeout(getAiMove, 500);
     }
-  }, [isAITurn, status, game, updateGame, toast, engine, playerColor]);
+  }, [isAITurn, status, game, updateGame, toast, engine, playerColor, playMoveSound]);
 
   const newGame = useCallback((color: 'w' | 'b' = 'w') => {
     const newGameInstance = new Chess();
@@ -170,10 +182,11 @@ export const useChessGame = () => {
     if (move) {
         setGame(gameCopy);
         updateGame(gameCopy);
+        playMoveSound();
     }
     
     setPromotionToSelect(null);
-  }, [game, promotionToSelect, updateGame]);
+  }, [game, promotionToSelect, updateGame, playMoveSound]);
 
   const onDrop = (sourceSquare: Square, targetSquare: Square): boolean => {
     if (isAITurn) return false;
@@ -192,6 +205,7 @@ export const useChessGame = () => {
 
         setGame(gameCopy);
         updateGame(gameCopy);
+        playMoveSound();
 
         // If it was a promotion, open the dialog to allow changing the piece
         if (move.flags.includes('p')) {
