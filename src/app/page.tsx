@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Chessboard } from '@/components/chessboard';
 import { GameSidebar } from '@/components/game-sidebar';
 import { useChessGame } from '@/hooks/use-chess-game';
@@ -8,10 +9,21 @@ import { Card } from '@/components/ui/card';
 import { useTranslation } from '@/i18n/provider';
 import { PromotionDialog } from '@/components/promotion-dialog';
 
-export default function Home() {
+function ChessGameContent() {
   const game = useChessGame();
   const { t } = useTranslation();
   const [boardTheme, setBoardTheme] = useState('default');
+  const searchParams = useSearchParams();
+
+  // Load FEN from URL parameter if present
+  useEffect(() => {
+    const fenParam = searchParams.get('FEN');
+    if (fenParam) {
+      game.loadFen(fenParam);
+    }
+    // We only want to do this once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-board-theme', boardTheme);
@@ -77,5 +89,13 @@ export default function Home() {
         color={promotingColor}
       />
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-background text-primary">Cargando ajedrez...</div>}>
+      <ChessGameContent />
+    </Suspense>
   );
 }
