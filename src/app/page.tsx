@@ -15,9 +15,9 @@ function ChessGameContent() {
   const [boardTheme, setBoardTheme] = useState('default');
   const searchParams = useSearchParams();
 
-  // Load FEN from URL parameter if present
+  // Load FEN from URL parameter if present (case-insensitive)
   useEffect(() => {
-    const fenParam = searchParams.get('FEN');
+    const fenParam = searchParams.get('FEN') || searchParams.get('fen');
     if (fenParam) {
       game.loadFen(fenParam);
     }
