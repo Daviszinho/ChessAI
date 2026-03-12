@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -8,6 +9,7 @@ import { useChessGame } from '@/hooks/use-chess-game';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from '@/i18n/provider';
 import { PromotionDialog } from '@/components/promotion-dialog';
+import { GameOverDialog } from '@/components/game-over-dialog';
 
 function ChessGameContent() {
   const game = useChessGame();
@@ -21,7 +23,6 @@ function ChessGameContent() {
     if (fenParam) {
       game.loadFen(fenParam);
     }
-    // We only want to do this once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -48,6 +49,10 @@ function ChessGameContent() {
   }, []);
 
   const promotingColor = game.turn === 'w' ? 'b' : 'w';
+
+  const handleRestart = () => {
+      game.newGame(game.playerColor);
+  };
 
   return (
     <>
@@ -87,6 +92,12 @@ function ChessGameContent() {
         open={!!game.promotionToSelect}
         onSelect={game.handlePromotion}
         color={promotingColor}
+      />
+      <GameOverDialog
+        status={game.status}
+        winner={game.winner}
+        onNewGame={handleRestart}
+        onClose={game.resetStatus}
       />
     </>
   );

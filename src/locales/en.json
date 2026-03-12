@@ -37,5 +37,11 @@
     "gray": "Gray"
   },
   "loadEnginesError": "Could not load AI engines.",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "gameOver": "Game Over",
+  "winnerWhite": "White wins!",
+  "winnerBlack": "Black wins!",
+  "stalemateMessage": "The game ended in a stalemate.",
+  "drawMessage": "The game ended in a draw.",
+  "playAgain": "Play Again"
 }

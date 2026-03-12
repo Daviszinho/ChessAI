@@ -37,5 +37,11 @@
     "gray": "Gris"
   },
   "loadEnginesError": "No se pudieron cargar los motores de IA.",
-  "loading": "Cargando..."
+  "loading": "Cargando...",
+  "gameOver": "Fin del Juego",
+  "winnerWhite": "¡Las blancas ganan!",
+  "winnerBlack": "¡Las negras ganan!",
+  "stalemateMessage": "La partida terminó en tablas por ahogado.",
+  "drawMessage": "La partida terminó en tablas.",
+  "playAgain": "Jugar de Nuevo"
 }

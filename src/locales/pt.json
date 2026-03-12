@@ -37,5 +37,11 @@
     "gray": "Cinza"
   },
   "loadEnginesError": "Não foi possível carregar os motores de IA.",
-  "loading": "Carregando..."
+  "loading": "Carregando...",
+  "gameOver": "Fim de Jogo",
+  "winnerWhite": "As brancas venceram!",
+  "winnerBlack": "As pretas venceram!",
+  "stalemateMessage": "O jogo terminou em empate por afogamento.",
+  "drawMessage": "O jogo terminou em empate.",
+  "playAgain": "Jogar Novamente"
 }
