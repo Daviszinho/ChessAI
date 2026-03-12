@@ -43,5 +43,6 @@
   "winnerBlack": "¡Las negras ganan!",
   "stalemateMessage": "La partida terminó en tablas por ahogado.",
   "drawMessage": "La partida terminó en tablas.",
-  "playAgain": "Jugar de Nuevo"
+  "playAgain": "Jugar de Nuevo",
+  "close": "Cerrar"
 }

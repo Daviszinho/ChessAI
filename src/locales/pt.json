@@ -43,5 +43,6 @@
   "winnerBlack": "As pretas venceram!",
   "stalemateMessage": "O jogo terminou em empate por afogamento.",
   "drawMessage": "O jogo terminou em empate.",
-  "playAgain": "Jogar Novamente"
+  "playAgain": "Jogar Novamente",
+  "close": "Fechar"
 }

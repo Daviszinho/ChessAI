@@ -15,6 +15,7 @@ function ChessGameContent() {
   const game = useChessGame();
   const { t } = useTranslation();
   const [boardTheme, setBoardTheme] = useState('default');
+  const [modalDismissed, setModalDismissed] = useState(false);
   const searchParams = useSearchParams();
 
   // Load FEN from URL parameter if present (case-insensitive)
@@ -25,6 +26,13 @@ function ChessGameContent() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Reset modal dismissal when game status returns to in-progress (e.g. on new game)
+  useEffect(() => {
+    if (game.status === 'in-progress') {
+      setModalDismissed(false);
+    }
+  }, [game.status]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-board-theme', boardTheme);
@@ -52,7 +60,14 @@ function ChessGameContent() {
 
   const handleRestart = () => {
       game.newGame(game.playerColor);
+      setModalDismissed(false);
   };
+
+  const handleCloseModal = () => {
+    setModalDismissed(true);
+  };
+
+  const isGameOverVisible = game.status !== 'in-progress' && !modalDismissed;
 
   return (
     <>
@@ -94,10 +109,11 @@ function ChessGameContent() {
         color={promotingColor}
       />
       <GameOverDialog
+        open={isGameOverVisible}
         status={game.status}
         winner={game.winner}
         onNewGame={handleRestart}
-        onClose={game.resetStatus}
+        onClose={handleCloseModal}
       />
     </>
   );

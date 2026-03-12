@@ -43,5 +43,6 @@
   "winnerBlack": "Black wins!",
   "stalemateMessage": "The game ended in a stalemate.",
   "drawMessage": "The game ended in a draw.",
-  "playAgain": "Play Again"
+  "playAgain": "Play Again",
+  "close": "Close"
 }

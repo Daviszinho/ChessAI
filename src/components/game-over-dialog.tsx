@@ -4,6 +4,7 @@
 import {
   AlertDialog,
   AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -19,12 +20,13 @@ interface GameOverDialogProps {
   winner: 'w' | 'b' | null;
   onNewGame: () => void;
   onClose: () => void;
+  open: boolean;
 }
 
-export function GameOverDialog({ status, winner, onNewGame, onClose }: GameOverDialogProps) {
+export function GameOverDialog({ status, winner, onNewGame, onClose, open }: GameOverDialogProps) {
   const { t } = useTranslation();
 
-  if (status === 'in-progress') return null;
+  if (status === 'in-progress' || !open) return null;
 
   const getTitle = () => {
     if (status === 'checkmate') return t('checkmate');
@@ -47,7 +49,7 @@ export function GameOverDialog({ status, winner, onNewGame, onClose }: GameOverD
   };
 
   return (
-    <AlertDialog open={status !== 'in-progress'}>
+    <AlertDialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <AlertDialogContent className="sm:max-w-md">
         <AlertDialogHeader className="flex flex-col items-center justify-center">
           {getIcon()}
@@ -58,8 +60,11 @@ export function GameOverDialog({ status, winner, onNewGame, onClose }: GameOverD
             {getDescription()}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-          <AlertDialogAction onClick={onNewGame} className="w-full">
+        <AlertDialogFooter className="flex flex-col sm:flex-row gap-2">
+          <AlertDialogCancel onClick={onClose} className="w-full sm:w-auto">
+            {t('close')}
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={onNewGame} className="w-full sm:flex-1">
             {t('playAgain')}
           </AlertDialogAction>
         </AlertDialogFooter>
